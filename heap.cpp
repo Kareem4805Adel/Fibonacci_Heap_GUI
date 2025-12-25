@@ -1,20 +1,21 @@
-#include <iostream>
-#include "linkedlist.cpp"
 #include "heap.h"
+#include "linkedlist.cpp"
+#include <iostream>
 
 using namespace std;
 
-void printSeparator() {
+void printSeparator()
+{
     cout << "\n" << string(60, '=') << "\n\n";
 }
 
-void testBasicNodeCreation() {
+void testBasicNodeCreation()
+{
     cout << "TEST 1: Basic Node Creation\n";
     cout << string(60, '-') << "\n";
 
     node a(10, "Sample Task");
-    cout << "Node created with key: " << a.key
-         << " and Taskname: " << a.Taskname << endl;
+    cout << "Node created with key: " << a.key << " and Taskname: " << a.Taskname << endl;
     cout << "Left->key: " << a.left->key << endl;
     cout << "Right->key: " << a.right->key << endl;
     cout << "Children empty: " << (a.children->isEmpty() ? "Yes" : "No") << endl;
@@ -22,15 +23,16 @@ void testBasicNodeCreation() {
     cout << "✓ Test Passed: Node created successfully\n";
 }
 
-void testHeapCreationAndInsert() {
+void testHeapCreationAndInsert()
+{
     cout << "TEST 2: Heap Creation and Single Insert\n";
     cout << string(60, '-') << "\n";
 
     FibonacciHeap heap;
-    node* n1 = new node(5, "Task A");
+    node *n1 = new node(5, "Task A");
 
     heap.insert(n1);
-    node* min = heap.findMin();
+    node *min = heap.findMin();
 
     if (min != nullptr && min->key == 5) {
         cout << "✓ Inserted node with key 5\n";
@@ -41,15 +43,16 @@ void testHeapCreationAndInsert() {
     }
 }
 
-void testMultipleInserts() {
+void testMultipleInserts()
+{
     cout << "TEST 3: Multiple Inserts and FindMin\n";
     cout << string(60, '-') << "\n";
 
     FibonacciHeap heap;
-    node* n1 = new node(10, "Task A");
-    node* n2 = new node(5, "Task B");
-    node* n3 = new node(20, "Task C");
-    node* n4 = new node(3, "Task D");
+    node *n1 = new node(10, "Task A");
+    node *n2 = new node(5, "Task B");
+    node *n3 = new node(20, "Task C");
+    node *n4 = new node(3, "Task D");
 
     heap.insert(n1);
     cout << "Inserted key 10, Min: " << heap.findMin()->key << endl;
@@ -70,14 +73,15 @@ void testMultipleInserts() {
     }
 }
 
-void testExtractMin() {
+void testExtractMin()
+{
     cout << "TEST 4: Extract Min\n";
     cout << string(60, '-') << "\n";
 
     FibonacciHeap heap;
-    node* n1 = new node(10, "Task A");
-    node* n2 = new node(5, "Task B");
-    node* n3 = new node(15, "Task C");
+    node *n1 = new node(10, "Task A");
+    node *n2 = new node(5, "Task B");
+    node *n3 = new node(15, "Task C");
 
     heap.insert(n1);
     heap.insert(n2);
@@ -85,7 +89,7 @@ void testExtractMin() {
 
     cout << "Initial min: " << heap.findMin()->key << endl;
 
-    node* extracted = heap.extractMin();
+    node *extracted = heap.extractMin();
     cout << "Extracted: " << extracted->key << " (Task: " << extracted->Taskname << ")\n";
 
     cout << "New min: " << heap.findMin()->key << endl;
@@ -100,14 +104,15 @@ void testExtractMin() {
     delete extracted;
 }
 
-void testDecreaseKey() {
+void testDecreaseKey()
+{
     cout << "TEST 5: Decrease Key\n";
     cout << string(60, '-') << "\n";
 
     FibonacciHeap heap;
-    node* n1 = new node(10, "Task A");
-    node* n2 = new node(5, "Task B");
-    node* n3 = new node(15, "Task C");
+    node *n1 = new node(10, "Task A");
+    node *n2 = new node(5, "Task B");
+    node *n3 = new node(15, "Task C");
 
     heap.insert(n1);
     heap.insert(n2);
@@ -127,15 +132,16 @@ void testDecreaseKey() {
     }
 }
 
-void testDeleteNode() {
+void testDeleteNode()
+{
     cout << "TEST 6: Delete Node\n";
     cout << string(60, '-') << "\n";
 
     FibonacciHeap heap;
-    node* n1 = new node(10, "Task A");
-    node* n2 = new node(5, "Task B");
-    node* n3 = new node(15, "Task C");
-    node* n4 = new node(20, "Task D");
+    node *n1 = new node(10, "Task A");
+    node *n2 = new node(5, "Task B");
+    node *n3 = new node(15, "Task C");
+    node *n4 = new node(20, "Task D");
 
     heap.insert(n1);
     heap.insert(n2);
@@ -152,7 +158,8 @@ void testDeleteNode() {
     cout << "✓ Test completed: Node deleted\n";
 }
 
-void testMultipleExtracts() {
+void testMultipleExtracts()
+{
     cout << "TEST 7: Multiple Extract Mins\n";
     cout << string(60, '-') << "\n";
 
@@ -169,10 +176,10 @@ void testMultipleExtracts() {
 
     cout << "Extracting in order:\n";
     for (int i = 0; i < 6; i++) {
-        node* extracted = heap.extractMin();
+        node *extracted = heap.extractMin();
         if (extracted != nullptr) {
-            cout << i+1 << ". Key: " << extracted->key
-                 << " (Task: " << extracted->Taskname << ")\n";
+            cout << i + 1 << ". Key: " << extracted->key << " (Task: " << extracted->Taskname
+                 << ")\n";
             delete extracted;
         }
     }
@@ -180,34 +187,37 @@ void testMultipleExtracts() {
     cout << "✓ Test completed: All nodes extracted\n";
 }
 
-void testEdgeCases() {
+void testEdgeCases()
+{
     cout << "TEST 8: Edge Cases\n";
     cout << string(60, '-') << "\n";
 
     // Test 1: Extract from empty heap
     FibonacciHeap heap1;
-    node* result = heap1.extractMin();
-    cout << "Extract from empty heap: " << (result == nullptr ? "NULL (correct)" : "Not NULL") << "\n";
+    node *result = heap1.extractMin();
+    cout << "Extract from empty heap: " << (result == nullptr ? "NULL (correct)" : "Not NULL")
+         << "\n";
 
     // Test 2: Single node heap
     FibonacciHeap heap2;
-    node* single = new node(42, "Single Task");
+    node *single = new node(42, "Single Task");
     heap2.insert(single);
-    node* extracted = heap2.extractMin();
+    node *extracted = heap2.extractMin();
     cout << "Single node extract: " << (extracted->key == 42 ? "✓ Correct" : "✗ Failed") << "\n";
     delete extracted;
 
     // Test 3: Decrease key validation
     FibonacciHeap heap3;
-    node* n = new node(10, "Test");
+    node *n = new node(10, "Test");
     heap3.insert(n);
     cout << "Attempting to decrease 10 to 15 (should fail): ";
-    heap3.decreaseKey(n, 15);  // Should print error
+    heap3.decreaseKey(n, 15); // Should print error
 
     cout << "✓ Edge cases tested\n";
 }
 
-void testComplexScenario() {
+void testComplexScenario()
+{
     cout << "TEST 9: Complex Scenario\n";
     cout << string(60, '-') << "\n";
 
@@ -215,11 +225,11 @@ void testComplexScenario() {
 
     cout << "Building a complex heap structure...\n";
 
-    node* n1 = new node(10, "Priority 10");
-    node* n2 = new node(20, "Priority 20");
-    node* n3 = new node(5, "Priority 5");
-    node* n4 = new node(15, "Priority 15");
-    node* n5 = new node(30, "Priority 30");
+    node *n1 = new node(10, "Priority 10");
+    node *n2 = new node(20, "Priority 20");
+    node *n3 = new node(5, "Priority 5");
+    node *n4 = new node(15, "Priority 15");
+    node *n5 = new node(30, "Priority 30");
 
     heap.insert(n1);
     heap.insert(n2);
@@ -230,7 +240,7 @@ void testComplexScenario() {
     cout << "1. Initial min: " << heap.findMin()->key << endl;
 
     // Extract min
-    node* extracted1 = heap.extractMin();
+    node *extracted1 = heap.extractMin();
     cout << "2. Extracted: " << extracted1->key << ", new min: " << heap.findMin()->key << endl;
     delete extracted1;
 
@@ -248,8 +258,9 @@ void testComplexScenario() {
     cout << "5. Extracting remaining nodes:\n";
     int count = 0;
     while (true) {
-        node* n = heap.extractMin();
-        if (n == nullptr) break;
+        node *n = heap.extractMin();
+        if (n == nullptr)
+            break;
         cout << "   - Extracted: " << n->key << " (" << n->Taskname << ")\n";
         delete n;
         count++;
@@ -258,7 +269,8 @@ void testComplexScenario() {
     cout << "✓ Test completed: " << count << " nodes extracted\n";
 }
 
-int main() {
+int main()
+{
     cout << "\n";
     cout << "╔════════════════════════════════════════════════════════════╗\n";
     cout << "║        FIBONACCI HEAP - COMPREHENSIVE TEST SUITE          ║\n";
@@ -299,7 +311,8 @@ int main() {
     return 0;
 }
 
-node* FibonacciHeap::insert(node* newNode){
+node *FibonacciHeap::insert(node *newNode)
+{
     rootlist->insertLast(newNode);
 
     if (min == nullptr || newNode->key < min->key) {
@@ -309,20 +322,21 @@ node* FibonacciHeap::insert(node* newNode){
     return newNode;
 }
 
-node* FibonacciHeap::findMin() const{
+node *FibonacciHeap::findMin() const
+{
     return min;
 }
 
-node* FibonacciHeap::extractMin() {
-    node* z = findMin();
+node *FibonacciHeap::extractMin()
+{
+    node *z = findMin();
     if (z != nullptr) {
-
         if (!z->children->isEmpty()) {
             int Children = z->children->size();
             CircularDoublyLinkedList<node *> childrenCopy(*z->children);
-            Node<node*>* current = childrenCopy.head;
+            Node<node *> *current = childrenCopy.head;
             for (int i = 0; i < Children; i++) {
-                node* x = current->data;
+                node *x = current->data;
                 x->parent = nullptr;
                 rootlist->insertLast(x);
                 current = current->next;
@@ -341,15 +355,15 @@ node* FibonacciHeap::extractMin() {
     return z;
 }
 
-void FibonacciHeap::decreaseKey(node* handle, int newKey){
-
+void FibonacciHeap::decreaseKey(node *handle, int newKey)
+{
     if (newKey > handle->key) {
         cout << "Error: new key is greater than current key" << endl;
         return;
     }
 
     handle->key = newKey;
-    node* parent = handle->parent;
+    node *parent = handle->parent;
 
     if (parent != nullptr && handle->key < parent->key) {
         Cut(handle, parent);
@@ -361,33 +375,35 @@ void FibonacciHeap::decreaseKey(node* handle, int newKey){
     }
 }
 
-void FibonacciHeap::deleteNode(node* handle){
+void FibonacciHeap::deleteNode(node *handle)
+{
     decreaseKey(handle, INT_MIN);
     extractMin();
 }
 
-void FibonacciHeap::Consolidate(){
+void FibonacciHeap::Consolidate()
+{
     const int MAX_DEGREE = 64;
-    node* A[MAX_DEGREE];
-    for (int i = 0; i < MAX_DEGREE; i++){
+    node *A[MAX_DEGREE];
+    for (int i = 0; i < MAX_DEGREE; i++) {
         A[i] = nullptr;
     }
 
     int rootSize = rootlist->size();
-    if (rootSize == 0) return;
+    if (rootSize == 0)
+        return;
 
-
-    CircularDoublyLinkedList<node*> RootListCopy(*rootlist);
-    Node<node*>* current = RootListCopy.head;
+    CircularDoublyLinkedList<node *> RootListCopy(*rootlist);
+    Node<node *> *current = RootListCopy.head;
 
     for (int i = 0; i < rootSize; i++) {
-        node* x = current->data;
+        node *x = current->data;
         int d = x->degree;
 
         while (A[d] != nullptr) {
-            node* y = A[d];
+            node *y = A[d];
             if (x->key > y->key) {
-                node* temp = x;
+                node *temp = x;
                 x = y;
                 y = temp;
             }
@@ -399,22 +415,21 @@ void FibonacciHeap::Consolidate(){
         current = current->next;
     }
 
-
     min = nullptr;
     delete rootlist;
-    rootlist = new CircularDoublyLinkedList<node*>();
-    for (int i = 0; i < MAX_DEGREE; i++){
-        if (A[i] != nullptr){
+    rootlist = new CircularDoublyLinkedList<node *>();
+    for (int i = 0; i < MAX_DEGREE; i++) {
+        if (A[i] != nullptr) {
             rootlist->insertLast(A[i]);
-            if (min == nullptr || A[i]->key < min->key){
+            if (min == nullptr || A[i]->key < min->key) {
                 min = A[i];
             }
         }
     }
-
 }
 
-void FibonacciHeap::Link(node* x, node*y){
+void FibonacciHeap::Link(node *x, node *y)
+{
     rootlist->deleteValue(y);
     x->children->insertLast(y);
     y->parent = x;
@@ -422,7 +437,8 @@ void FibonacciHeap::Link(node* x, node*y){
     y->mark = false;
 }
 
-void FibonacciHeap::Cut(node* x, node*y){
+void FibonacciHeap::Cut(node *x, node *y)
+{
     y->children->deleteValue(x);
     y->degree--;
     insert(x);
@@ -430,12 +446,13 @@ void FibonacciHeap::Cut(node* x, node*y){
     x->mark = false;
 }
 
-void FibonacciHeap::cascading_cut(node* y){
-    node* z = y->parent;
-    if (z != nullptr){
-        if (y->mark == false){
+void FibonacciHeap::cascading_cut(node *y)
+{
+    node *z = y->parent;
+    if (z != nullptr) {
+        if (y->mark == false) {
             y->mark = true;
-        }else{
+        } else {
             Cut(y, z);
             cascading_cut(z);
         }
