@@ -210,10 +210,9 @@ void MainWindow::removePatient(int patientId)
                                      .arg(QString::fromStdString(p->getName())));
     }
 }
-
 void MainWindow::changePriority(int patientId)
 {
-    patient* p = patient::getPatient(patientId);
+    patient *p = patient::getPatient(patientId);
     if (p == nullptr) {
         QMessageBox::warning(this, "Error", "Patient not found.");
         return;
@@ -221,39 +220,46 @@ void MainWindow::changePriority(int patientId)
 
     int currentPriority = p->GetPriotiry();
 
-    // Show input dialog to get new priority
     bool ok;
-    int newPriority = QInputDialog::getInt(this,
-                                           "Change Priority",
-                                           QString("Enter new priority for '%1'\n(1=Critical, 10=Minor)\nCurrent priority: %2")
-                                               .arg(QString::fromStdString(p->getName()))
-                                               .arg(currentPriority),
-                                           currentPriority,  // default value
-                                           1,                // minimum
-                                           10,               // maximum
-                                           1,                // step
-                                           &ok);
+    int newPriority = QInputDialog::getInt(
+        this,
+        "Change Priority",
+        QString("Enter new priority for '%1'\n(1 = Critical, 10 = Minor)\nCurrent priority: %2")
+            .arg(QString::fromStdString(p->getName()))
+            .arg(currentPriority),
+        currentPriority,
+        1,
+        10,
+        1,
+        &ok);
 
-    if (ok) {
-        if (newPriority == currentPriority) {
-            QMessageBox::information(this, "No Change",
-                                     "Priority remains the same.");
-            return;
-        }
+    if (!ok)
+        return;
 
-        // Update priority in the system
-        erSystem->IncreasePriority(*p, newPriority);
-        p->SetPriority(newPriority);
-
-        updateTable();
-
-        ui->statusLabel->setText(QString("Priority changed for '%1': %2 → %3")
-                                     .arg(QString::fromStdString(p->getName()))
-                                     .arg(currentPriority)
-                                     .arg(newPriority));
+    if (newPriority > currentPriority) {
+        QMessageBox::warning(
+            this,
+            "Invalid Priority Change",
+            "You can only increase priority by entering a LOWER number.\n"
+            "Higher numbers mean lower priority.");
+        return;
     }
-}
 
+    if (newPriority == currentPriority) {
+        QMessageBox::information(this, "No Change", "Priority remains the same.");
+        return;
+    }
+
+    erSystem->IncreasePriority(*p, newPriority);
+    p->SetPriority(newPriority);
+
+    updateTable();
+
+    ui->statusLabel->setText(QString("Priority changed for '%1': %2 → %3")
+                                 .arg(QString::fromStdString(p->getName()))
+                                 .arg(currentPriority)
+                                 .arg(newPriority));
+}
 void MainWindow::on_nameInput_editingFinished()
 {
     // Optional: Could add validation here
