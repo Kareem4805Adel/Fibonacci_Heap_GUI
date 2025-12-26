@@ -21,13 +21,6 @@ public:
 private slots:
     void on_addButton_clicked();
     void on_extractButton_clicked();
-    void on_nameInput_editingFinished();
-    void on_conditionInput_textChanged();
-    void on_ageInput_valueChanged(int arg1);
-    void on_riskInput_valueChanged(int arg1);
-    void on_waitingListTable_itemSelectionChanged();
-    void on_statusLabel_linkActivated(const QString &link);
-    void on_conditionInput_undoAvailable(bool b);
 
 private:
     Ui::MainWindow *ui;
