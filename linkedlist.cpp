@@ -209,40 +209,6 @@ public:
 
         delete current;
     }
-
-    // Display Forward
-    /*void displayForward() {
-        if (isEmpty()) {
-            cout << "List is empty\n";
-            return;
-        }
-
-        Node* temp = head;
-        do {
-            cout << temp->data << " <-> ";
-            temp = temp->next;
-        } while (temp != head);
-
-        cout << "(HEAD)\n";
-    }
-
-    // Display backward
-    void displayBackward() {
-        if (isEmpty()) {
-            cout << "List is empty\n";
-            return;
-        }
-
-        Node* temp = head->prev;
-        Node* tail = temp;
-
-        do {
-            cout << temp->data << " <-> ";
-            temp = temp->prev;
-        } while (temp != tail);
-
-        cout << "(TAIL)\n";
-    }*/
 };
 
 #endif

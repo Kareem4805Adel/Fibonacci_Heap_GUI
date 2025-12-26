@@ -9,14 +9,14 @@ class ERsystem
 public:
     ERsystem();
     ~ERsystem();
-    node* AddToList(patient& p);
-    void RemoveFromList(patient& p);
-    node* AcceptPatiant();
-    void IncreasePriority(patient& p, int priority);
-    node* getHighestPriority();
+    node *AddToList(patient &p);
+    void RemoveFromList(patient &p);
+    node *AcceptPatiant();
+    void IncreasePriority(patient &p, int priority);
+    node *getHighestPriority();
 
 private:
     FibonacciHeap *waitingList;
 };
 
-#endif // ERSYSTEM_H
+#endif

@@ -11,12 +11,11 @@ class node
 public:
     int key, degree;
     string Taskname;
-    bool mark; // to check if the node has lost a child since it became a child of another node
+    bool mark;
     node *left;
     node *right;
     node *parent;
     CircularDoublyLinkedList<node *> *children;
-    // taskname not completed
     node(int val, string Tasknamepara)
         : key(val)
         , left(nullptr)
@@ -26,7 +25,7 @@ public:
         , mark(false)
         , degree(0)
     {
-        //pointing to itself
+
         right = this;
         left = this;
         children = new CircularDoublyLinkedList<node *>();
@@ -48,7 +47,7 @@ public:
 
     ~FibonacciHeap()
     {
-        delete rootlist; // Changed from delete[]
+        delete rootlist;
     }
 
     node *insert(node *newNode);

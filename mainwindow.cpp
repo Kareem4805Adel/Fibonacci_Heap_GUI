@@ -1,12 +1,12 @@
 #include "mainwindow.h"
-#include "./ui_mainwindow.h"
-#include "ersystem.h"
-#include "patient.h"
+#include <QHBoxLayout>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidgetItem>
-#include <QHBoxLayout>
-#include <QInputDialog>
+#include "./ui_mainwindow.h"
+#include "ersystem.h"
+#include "patient.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -14,26 +14,21 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // Initialize the ER system
     erSystem = new ERsystem();
 
-    // Setup table headers
     ui->waitingListTable->setColumnCount(5);
     QStringList headers;
     headers << "ID" << "Name" << "Age" << "Risk" << "Action";
     ui->waitingListTable->setHorizontalHeaderLabels(headers);
 
-    // Make table read-only except for action buttons
     ui->waitingListTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    // Set column widths
     ui->waitingListTable->setColumnWidth(0, 50);
     ui->waitingListTable->setColumnWidth(1, 200);
     ui->waitingListTable->setColumnWidth(2, 80);
     ui->waitingListTable->setColumnWidth(3, 80);
     ui->waitingListTable->setColumnWidth(4, 150);
 
-    // Initial status
     ui->statusLabel->setText("Ready - No patients in queue");
 }
 
@@ -51,33 +46,29 @@ void MainWindow::updateTable()
     // Get all patients and display them
     int rowCount = 0;
     for (int i = 1; i < patient::id; i++) {
-        patient* p = patient::getPatient(i);
-        if (p != nullptr && patient::arrPN[i-1] != nullptr) {
-            // This patient is still in the waiting list
+        patient *p = patient::getPatient(i);
+        if (p != nullptr && patient::arrPN[i - 1] != nullptr) {
+
             ui->waitingListTable->insertRow(rowCount);
 
-            // ID
-            QTableWidgetItem* idItem = new QTableWidgetItem(QString::number(i));
+
+            QTableWidgetItem *idItem = new QTableWidgetItem(QString::number(i));
             ui->waitingListTable->setItem(rowCount, 0, idItem);
 
-            // Name
-            QTableWidgetItem* nameItem = new QTableWidgetItem(QString::fromStdString(p->getName()));
+            QTableWidgetItem *nameItem = new QTableWidgetItem(QString::fromStdString(p->getName()));
             ui->waitingListTable->setItem(rowCount, 1, nameItem);
 
-            // Age
-            QTableWidgetItem* ageItem = new QTableWidgetItem(QString::number(p->getAge()));
+            QTableWidgetItem *ageItem = new QTableWidgetItem(QString::number(p->getAge()));
             ui->waitingListTable->setItem(rowCount, 2, ageItem);
 
-            // Risk (Priority)
-            QTableWidgetItem* riskItem = new QTableWidgetItem(QString::number(p->GetPriotiry()));
+            QTableWidgetItem *riskItem = new QTableWidgetItem(QString::number(p->GetPriotiry()));
             ui->waitingListTable->setItem(rowCount, 3, riskItem);
 
-            // Action buttons
-            QPushButton* removeBtn = new QPushButton("Remove");
-            QPushButton* changePriorityBtn = new QPushButton("Set Priority");
+            QPushButton *removeBtn = new QPushButton("Remove");
+            QPushButton *changePriorityBtn = new QPushButton("Set Priority");
 
-            QWidget* buttonWidget = new QWidget();
-            QHBoxLayout* layout = new QHBoxLayout(buttonWidget);
+            QWidget *buttonWidget = new QWidget();
+            QHBoxLayout *layout = new QHBoxLayout(buttonWidget);
             layout->addWidget(changePriorityBtn);
             layout->addWidget(removeBtn);
             layout->setContentsMargins(2, 2, 2, 2);
@@ -85,10 +76,7 @@ void MainWindow::updateTable()
 
             ui->waitingListTable->setCellWidget(rowCount, 4, buttonWidget);
 
-            // Connect buttons with patient ID
-            connect(removeBtn, &QPushButton::clicked, this, [this, i]() {
-                removePatient(i);
-            });
+            connect(removeBtn, &QPushButton::clicked, this, [this, i]() { removePatient(i); });
 
             connect(changePriorityBtn, &QPushButton::clicked, this, [this, i]() {
                 changePriority(i);
@@ -98,11 +86,10 @@ void MainWindow::updateTable()
         }
     }
 
-    // Update status
     if (rowCount == 0) {
         ui->statusLabel->setText("Ready - No patients in queue");
     } else {
-        node* nextPatient = erSystem->getHighestPriority();
+        node *nextPatient = erSystem->getHighestPriority();
         if (nextPatient != nullptr) {
             ui->statusLabel->setText(QString("Patients in queue: %1 | Next: %2 (Priority: %3)")
                                          .arg(rowCount)
@@ -116,13 +103,11 @@ void MainWindow::updateTable()
 
 void MainWindow::on_addButton_clicked()
 {
-    // Get input values
     QString name = ui->nameInput->text().trimmed();
     int age = ui->ageInput->value();
     QString condition = ui->conditionInput->toPlainText().trimmed();
     int risk = ui->riskInput->value();
 
-    // Validate inputs
     if (name.isEmpty()) {
         QMessageBox::warning(this, "Input Error", "Please enter patient name.");
         return;
@@ -133,27 +118,19 @@ void MainWindow::on_addButton_clicked()
         return;
     }
 
-    // Create new patient
-    patient* newPatient = new patient(
-        name.toStdString(),
-        age,
-        risk
-        );
+    patient *newPatient = new patient(name.toStdString(), age, risk);
 
-    // Add to ER system
     erSystem->AddToList(*newPatient);
 
-    // Update table
     updateTable();
 
-    // Clear inputs
     ui->nameInput->clear();
     ui->conditionInput->clear();
     ui->ageInput->setValue(30);
     ui->riskInput->setValue(5);
 
-    // Show success message
-    QMessageBox::information(this, "Success",
+    QMessageBox::information(this,
+                             "Success",
                              QString("Patient '%1' added to waiting list with priority %2.")
                                  .arg(name)
                                  .arg(risk));
@@ -163,53 +140,53 @@ void MainWindow::on_addButton_clicked()
 
 void MainWindow::on_extractButton_clicked()
 {
-    node* extracted = erSystem->AcceptPatiant();
+    node *extracted = erSystem->AcceptPatiant();
 
     if (extracted == nullptr) {
         QMessageBox::information(this, "Queue Empty", "No patients in waiting list.");
         return;
     }
 
-    // Find and mark this patient as extracted (set their arrPN to nullptr)
     for (int i = 1; i < patient::id; i++) {
-        if (patient::arrPN[i-1] == extracted) {
-            patient::arrPN[i-1] = nullptr;
+        if (patient::arrPN[i - 1] == extracted) {
+            patient::arrPN[i - 1] = nullptr;
             break;
         }
     }
 
-    // Show message
-    QMessageBox::information(this, "Patient Accepted",
+    QMessageBox::information(this,
+                             "Patient Accepted",
                              QString("Now treating: %1\nPriority: %2")
                                  .arg(QString::fromStdString(extracted->Taskname))
                                  .arg(extracted->key));
 
-    // Update table
     updateTable();
 }
 
 void MainWindow::removePatient(int patientId)
 {
-    patient* p = patient::getPatient(patientId);
+    patient *p = patient::getPatient(patientId);
     if (p == nullptr) {
         QMessageBox::warning(this, "Error", "Patient not found.");
         return;
     }
 
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(this, "Confirm Removal",
+    reply = QMessageBox::question(this,
+                                  "Confirm Removal",
                                   QString("Remove patient '%1' from waiting list?")
                                       .arg(QString::fromStdString(p->getName())),
                                   QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
         erSystem->RemoveFromList(*p);
-        patient::arrPN[patientId - 1] = nullptr; // Mark as removed
+        patient::arrPN[patientId - 1] = nullptr;
         updateTable();
-        ui->statusLabel->setText(QString("Patient '%1' removed from queue.")
-                                     .arg(QString::fromStdString(p->getName())));
+        ui->statusLabel->setText(
+            QString("Patient '%1' removed from queue.").arg(QString::fromStdString(p->getName())));
     }
 }
+
 void MainWindow::changePriority(int patientId)
 {
     patient *p = patient::getPatient(patientId);
@@ -237,11 +214,10 @@ void MainWindow::changePriority(int patientId)
         return;
 
     if (newPriority > currentPriority) {
-        QMessageBox::warning(
-            this,
-            "Invalid Priority Change",
-            "You can only increase priority by entering a LOWER number.\n"
-            "Higher numbers mean lower priority.");
+        QMessageBox::warning(this,
+                             "Invalid Priority Change",
+                             "You can only increase priority by entering a LOWER number.\n"
+                             "Higher numbers mean lower priority.");
         return;
     }
 
@@ -259,38 +235,4 @@ void MainWindow::changePriority(int patientId)
                                  .arg(QString::fromStdString(p->getName()))
                                  .arg(currentPriority)
                                  .arg(newPriority));
-}
-void MainWindow::on_nameInput_editingFinished()
-{
-    // Optional: Could add validation here
-}
-
-void MainWindow::on_conditionInput_textChanged()
-{
-    // Optional: Could add character count or validation here
-}
-
-void MainWindow::on_ageInput_valueChanged(int arg1)
-{
-    // Optional: Could add age-based priority suggestions
-}
-
-void MainWindow::on_riskInput_valueChanged(int arg1)
-{
-    // Optional: Could show risk level description
-}
-
-void MainWindow::on_waitingListTable_itemSelectionChanged()
-{
-    // Optional: Could show patient details when selected
-}
-
-void MainWindow::on_statusLabel_linkActivated(const QString &link)
-{
-    // Not used currently
-}
-
-void MainWindow::on_conditionInput_undoAvailable(bool b)
-{
-    // Optional: Handle undo availability
 }

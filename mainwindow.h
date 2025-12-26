@@ -33,10 +33,9 @@ private:
     Ui::MainWindow *ui;
     ERsystem *erSystem;
 
-    // Helper methods
     void updateTable();
     void removePatient(int patientId);
-    void changePriority(int patientId);  // Changed from increasePriority
+    void changePriority(int patientId);
 };
 
-#endif // MAINWINDOW_H
+#endif
